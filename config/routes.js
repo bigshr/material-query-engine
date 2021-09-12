@@ -33,5 +33,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  // Materials API routes
+  'GET /api/materials/:id': 'MaterialController.fetchMaterials',
 
 };
