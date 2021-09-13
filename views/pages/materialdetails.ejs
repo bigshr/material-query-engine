@@ -1,1 +1,102 @@
-material details
+<main class="container-fluid px-5">
+    <% if (!materials || materials.length == 0) { %>
+        <p>Could not find the material</p>
+    <% } else { %>
+        <% const material = materials[0]; %>
+        <div class="card">
+            <div class="card-header text-center">                
+                <h5 class="card-title">Details for Material with ID: <strong> <%= material.id %> </strong> </h5>
+                <button type="button" class="btn btn-success" onclick="downloadJSON();" >
+                    <i class="fas fa-download"></i>
+                    Download JSON
+                  </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 py-5">
+                        <table class="table table-sm table-hover">                            
+                            <tbody>
+                                <tr>
+                                    <td><strong>ID</strong></td>
+                                    <td><%= material.id %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Formula</strong></td>
+                                    <td><%= material.prettyFormula %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Density</strong></td>
+                                    <td><%= material.density %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-4">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th colspan="2">spacegroup</th>
+                                </tr>                                
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>symprec</strong></td>
+                                    <td><%= material.spacegroup.symprec %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>source</strong></td>
+                                    <td><%= material.spacegroup.source %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>symbol</strong></td>
+                                    <td><%= material.spacegroup.symbol %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>number</strong></td>
+                                    <td><%= material.spacegroup.number %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>point group</strong></td>
+                                    <td><%= material.spacegroup.pointGroup %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>crystal system</strong></td>
+                                    <td><%= material.spacegroup.crystalSystem %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>hall</strong></td>
+                                    <td><%= material.spacegroup.hall %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-4">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">tags</th>
+                                </tr>                                
+                            </thead>
+                            <tbody>
+                                <% for (let tag of material.tags) { %>
+                                    <tr>
+                                        <td><%= tag %></td>                                        
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+          </div>
+
+          <script>
+              downloadData = <%- JSON.stringify(material) %>;
+              downloadFileName = '<%= material.id %>.json';              
+          </script>
+    <% } %>
+</main>

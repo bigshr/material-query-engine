@@ -46,8 +46,32 @@
         }
     },
 
-    getMaterialDetails(req, res) {
-        return res.view("pages/materialdetails");
+    async getMaterialDetails(req, res) {
+        try {
+            let {id} = req.allParams();    
+            let endpoint = `${sails.config.localApi.url}/materials/${id}`;
+            
+            sails.log.debug(`Calling API: ${endpoint}`);
+            
+            const result = await axios.get(endpoint);
+
+            sails.log.debug("Got data: ");
+            sails.log.debug(result.data);
+
+            return res.view(
+                "pages/materialdetails", 
+                {
+                    materials: result.data
+                });
+        }
+        catch (err) {
+            sails.log.error(err);
+            return res.view(
+                "pages/materialdetails", 
+                {
+                    err: err
+                });
+        }        
     }
 
  

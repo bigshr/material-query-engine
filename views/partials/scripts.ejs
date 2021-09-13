@@ -10,18 +10,7 @@
 <!-- fontawesome -->
 <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-auto-replace-svg="nest"></script>
 
-<!--
-<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#materials-table').DataTable();
-    } );
-</script>
--->
-
-<script type="text/javascript">    
-
+<script type="text/javascript">        
     const tableId = "#materials-table";
 
     async function getMaterials(id) {
@@ -29,7 +18,7 @@
         const endpoint = `${apiBaseUrl}/${id}`;
         console.log(endpoint);
 
-        const result = await axios.get(endpoint);
+        const result = await axios.get(endpoint);        
         console.log(result.data);    
         
         return result.data;
@@ -93,11 +82,17 @@
     }
 
     async function search() {        
-        try{            
+        try {            
             const searchId = getSearchInput();
+
+            if(!searchId) {
+                return;
+            }
             
             addTableContent(spinner());
-            const materials = await getMaterials(searchId);         
+            const materials = await getMaterials(searchId);  
+            
+            setDownloadDetails(materials, `${searchId}.json`);   
             addTableContent(rows(materials));
         } catch (err) {            
             addTableContent(`<p>${err}</p>`);            
@@ -116,6 +111,43 @@
         });
     }
 
+    function downloadJSON() {
+        if(!downloadData || downloadData.length == 0) {
+            return;
+        }
+
+        const json = JSON.stringify(downloadData);
+        const blob = new Blob(
+            [json],
+            {type: "text/json; charset=utf-8"}
+        );         
+        const link = document.createElement("a");
+        const blobUrl = URL.createObjectURL(blob);
+
+        
+        link.href = blobUrl;
+        link.download = downloadFileName;
+
+        document.body.appendChild(link);
+
+        link.dispatchEvent(
+            new MouseEvent('click', { 
+                bubbles: true, 
+                cancelable: true, 
+                view: window 
+            })
+        );
+        
+        document.body.removeChild(link);
+    }
+
+    function setDownloadDetails(materials, filename) {
+        $(document).ready(() => {
+            downloadData = materials;
+            downloadFileName = filename;
+        });
+    }
+
     $(document).ready(async () => {
         bindSearchEvents();
     })
@@ -124,3 +156,5 @@
 
 <!-- sails -->
 <script src="/dependencies/sails.io.js"></script> 
+
+<noscript>Your browser needs to support JavaScript for this app to function properly.</noscript>
