@@ -399,7 +399,7 @@ module.exports = {
   },
 
   localApi: {
-      url: "http://localhost:1337/api"
+      url: "https://material-query-engine.herokuapp.com/api"
   }
 
 
